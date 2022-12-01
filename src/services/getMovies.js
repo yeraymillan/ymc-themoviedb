@@ -1,5 +1,6 @@
 import { API_URL } from './settings'
 
-export function getMovies({page}) {
-  return fetch(`${API_URL}&page=${page}`).then((result) => result.json());
+export const getMovies = ({id}) => {
+  const apiUrl = `${API_URL}&page=${id}`
+  return fetch(apiUrl).then((result) => result.json());
 }
