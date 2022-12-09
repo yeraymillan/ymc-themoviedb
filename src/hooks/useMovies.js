@@ -2,9 +2,10 @@ import React from 'react'
 import { useGetMovies } from './useGetMovies';
 import { useInfiniteScroll } from './useInfiniteScroll';
 
+const PAGE_NUMBER = 1;
 const PAGE_LIMIT = 1;
 
-export function useMovies({ page, setPage }) {
+export function useMovies({ page = PAGE_NUMBER, setPage }) {
 
     const getMovies = useGetMovies()
     const [listMovies, setListMovies] = React.useState([])
