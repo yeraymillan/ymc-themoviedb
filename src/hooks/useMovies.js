@@ -1,35 +1,43 @@
 import React from 'react'
-import { useGetMovies } from './useGetMovies';
-import { useInfiniteScroll } from './useInfiniteScroll';
+import { getMovies } from '../services/getMovies';
 
-const PAGE_LIMIT = 1;
+const PAGE_NUMBER = 1;
 
-export function useMovies({ page, setPage }) {
+export function useMovies () {
 
-    const getMovies = useGetMovies()
     const [listMovies, setListMovies] = React.useState([])
+    const [page, setPage] = React.useState(PAGE_NUMBER)
     const [loading, setLoading] = React.useState(false)
 
     React.useEffect(() => {
         const movies = async () => {
             try {
-                if (page <= PAGE_LIMIT) {
-                    const data = await getMovies({ page }).then(movies => {
-                        return movies.results
-                    })
-                    setListMovies((prev) => {
-                        return [...prev, ...data]
-                    })
-                    setLoading(false)
-                }
+                const data = await getMovies({ page }).then(movies => {
+                    return movies.results
+                })
+                setListMovies((prev) => {
+                    return [...prev, ...data]
+                })
+                setLoading(false)
             } catch (error) {
                 console.log(error)
             }
         }
         movies()
-    }, [getMovies, page])
+    }, [page])
 
-    useInfiniteScroll({ setPage })
+    React.useEffect(() => {
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, [])
 
-    return { loading, listMovies }
+    const handleScroll = async () => {
+        if (window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.scrollHeight) {
+            setLoading(true);
+            setPage((prev) => prev + 1);
+        }
+    }
+
+    return {loading, listMovies}
+
 }

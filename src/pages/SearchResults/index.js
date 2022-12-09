@@ -3,13 +3,10 @@ import Loader from '../../components/Loader';
 import ListOfMovies from '../../components/ListOfMovies';
 import Grid from '@mui/material/Grid';
 import { useMovies } from '../../hooks/useMovies';
-import { useInfiniteScroll } from  '../../hooks/useInfiniteScroll';
 
 export default function SearchResults() {
 
-    const [page, setPage] = React.useState(1)
-    const {loading, listMovies} = useMovies({ page, setPage })
-    useInfiniteScroll({ setPage });
+    const {loading, listMovies} = useMovies()
 
     return (
         <div>
